@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+chan normalny;
+chan przestepny;
+
+//chan jakiRok;
+chan koniecRoku;
+</declaration>
+	<template>
+		<name x="5" y="5">Miesiac</name>
+		<declaration>clock dzien;</declaration>
+		<location id="id0" x="-281" y="145">
+			<name x="-272" y="119">Styczen</name>
+			<label kind="invariant" x="-263" y="136">dzien&lt;=31</label>
+		</location>
+		<location id="id1" x="-280" y="-51">
+			<name x="-290" y="-85">LutyP</name>
+			<label kind="invariant" x="-263" y="-51">dzien&lt;=29</label>
+		</location>
+		<location id="id2" x="-85" y="76">
+			<name x="-95" y="42">Luty</name>
+			<label kind="invariant" x="-76" y="85">dzien&lt;=28</label>
+		</location>
+		<location id="id3" x="-119" y="-85">
+			<name x="-129" y="-119">Marzec</name>
+			<label kind="invariant" x="-102" y="-102">dzien&lt;=31</label>
+		</location>
+		<location id="id4" x="17" y="-170">
+			<name x="7" y="-204">Kwiecien</name>
+			<label kind="invariant" x="7" y="-153">dzien&lt;=30</label>
+		</location>
+		<location id="id5" x="161" y="-170">
+			<name x="151" y="-204">Maj</name>
+			<label kind="invariant" x="187" y="-170">dzien&lt;=31</label>
+		</location>
+		<location id="id6" x="246" y="-68">
+			<name x="236" y="-102">Czerwiec</name>
+			<label kind="invariant" x="236" y="-51">dzien&lt;=30</label>
+		</location>
+		<location id="id7" x="255" y="119">
+			<name x="245" y="85">Lipiec</name>
+			<label kind="invariant" x="245" y="136">dzien&lt;=31</label>
+		</location>
+		<location id="id8" x="229" y="289">
+			<name x="219" y="255">Sierpien</name>
+			<label kind="invariant" x="136" y="272">dzien&lt;=31</label>
+		</location>
+		<location id="id9" x="110" y="425">
+			<name x="100" y="391">Wrzesien</name>
+			<label kind="invariant" x="100" y="442">dzien&lt;=30</label>
+		</location>
+		<location id="id10" x="-51" y="416">
+			<name x="-61" y="382">Pazdziernik</name>
+			<label kind="invariant" x="-25" y="425">dzien&lt;=31</label>
+		</location>
+		<location id="id11" x="-229" y="323">
+			<name x="-239" y="289">Listopad</name>
+			<label kind="invariant" x="-239" y="340">dzien&lt;=30</label>
+		</location>
+		<location id="id12" x="-280" y="221">
+			<name x="-263" y="204">Grudzien</name>
+			<label kind="invariant" x="-255" y="221">dzien&lt;=31</label>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="-263" y="-25">dzien==31</label>
+			<label kind="synchronisation" x="-255" y="-8">przestepny?</label>
+			<label kind="assignment" x="-263" y="17">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="guard" x="-161" y="93">dzien==31</label>
+			<label kind="synchronisation" x="-161" y="110">normalny?</label>
+			<label kind="assignment" x="-170" y="127">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id12"/>
+			<target ref="id0"/>
+			<label kind="guard" x="-268" y="161">dzien==31</label>
+			<label kind="synchronisation" x="-263" y="170">koniecRoku!</label>
+			<label kind="assignment" x="-263" y="178">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id11"/>
+			<target ref="id12"/>
+			<label kind="guard" x="-254" y="238">dzien==30</label>
+			<label kind="assignment" x="-254" y="272">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id11"/>
+			<label kind="guard" x="-211" y="335">dzien==31</label>
+			<label kind="assignment" x="-211" y="369">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-8" y="382">dzien==30</label>
+			<label kind="assignment" x="0" y="399">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id9"/>
+			<label kind="guard" x="110" y="306">dzien==31</label>
+			<label kind="assignment" x="110" y="340">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id8"/>
+			<label kind="guard" x="242" y="170">dzien==31</label>
+			<label kind="assignment" x="242" y="204">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id7"/>
+			<label kind="guard" x="250" y="-9">dzien==30</label>
+			<label kind="assignment" x="250" y="25">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="guard" x="179" y="-153">dzien==31</label>
+			<label kind="assignment" x="195" y="-136">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id5"/>
+			<label kind="guard" x="34" y="-187">dzien==30</label>
+			<label kind="assignment" x="35" y="-170">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-136" y="-136">dzien==31</label>
+			<label kind="assignment" x="-127" y="-153">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-93" y="-42">dzien==28</label>
+			<label kind="assignment" x="-85" y="-25">dzien:=0</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-246" y="-110">dzien==29</label>
+			<label kind="assignment" x="-246" y="-93">dzien:=0</label>
+		</transition>
+	</template>
+	<template>
+		<name>Rok</name>
+		<declaration>// Place local declarations here.
+int[1900,2018] rok=1900;
+
+bool nastepnyJestPrzestepny(int[1900,2018] rok) {
+        int nastepny = rok + 1;
+    if(nastepny % 400 ==0)
+        return true;
+    if(nastepny%4 == 0 &amp;&amp; nastepny % 100 !=0)
+        return true;
+    return false;
+}</declaration>
+		<location id="id13" x="34" y="8">
+			<name x="24" y="-26">Normalny</name>
+		</location>
+		<location id="id14" x="-229" y="17">
+			<name x="-239" y="-17">Przestepny</name>
+		</location>
+		<init ref="id13"/>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id13"/>
+			<label kind="guard" x="-153" y="-34">rok&lt;2018</label>
+			<label kind="synchronisation" x="-153" y="-51">koniecRoku?</label>
+			<label kind="assignment" x="-153" y="-17">rok++</label>
+		</transition>
+		<transition>
+			<source ref="id14"/>
+			<target ref="id14"/>
+			<label kind="synchronisation" x="-501" y="-17">przestepny!</label>
+			<nail x="-391" y="0"/>
+			<nail x="-323" y="-102"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id14"/>
+			<label kind="guard" x="-229" y="59">nastepnyJestPrzestepny(rok) &amp;&amp; rok&lt;2018</label>
+			<label kind="synchronisation" x="-229" y="76">koniecRoku?</label>
+			<label kind="assignment" x="-229" y="93">rok++</label>
+			<nail x="-69" y="119"/>
+			<nail x="-230" y="119"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="synchronisation" x="136" y="68">normalny!</label>
+			<nail x="144" y="42"/>
+			<nail x="93" y="110"/>
+			<nail x="17" y="102"/>
+		</transition>
+		<transition>
+			<source ref="id13"/>
+			<target ref="id13"/>
+			<label kind="guard" x="52" y="-127">rok&lt;2018 &amp;&amp; !nastepnyJestPrzestepny(rok)</label>
+			<label kind="synchronisation" x="52" y="-110">koniecRoku?</label>
+			<label kind="assignment" x="52" y="-93">rok++</label>
+			<nail x="34" y="-93"/>
+			<nail x="144" y="-93"/>
+			<nail x="144" y="-8"/>
+		</transition>
+	</template>
+	<system>//Miesiac = Miesiac();
+//Rok = Rok();
+system Miesiac, Rok ;</system>
+	<queries>
+		<query>
+			<formula>Miesiac.Maj--&gt; Miesiac.Kwiecien</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>Rok.Przestepny --&gt; Rok.Normalny</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A[] Miesiac.Luty imply Rok.Przestepny</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>A&lt;&gt; Miesiac.Styczen and Miesiac.dzien==31</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Rok.Przestepny</formula>
+			<comment></comment>
+		</query>
+		<query>
+			<formula>E&lt;&gt; Miesiac.LutyP and Rok.Normalny</formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>

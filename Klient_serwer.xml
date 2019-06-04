@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.1//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_2.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+const int MAKS_KLIENTOW = 2;
+
+chan syn [MAKS_KLIENTOW];
+chan synack [MAKS_KLIENTOW];
+chan ack [MAKS_KLIENTOW];
+broadcast chan przypiszSesje [MAKS_KLIENTOW];
+chan rozlaczSesje [MAKS_KLIENTOW];
+
+const int MAKS_CZAS_CZEKANIA_NA_ODPOWIEDZ = 20;
+const int T2 = 10;</declaration>
+	<template>
+		<name x="5" y="5">Serwer</name>
+		<declaration>// Place local declarations here.
+int obslugiwanyKlient;</declaration>
+		<location id="id0" x="161" y="0">
+			<name x="151" y="-34">GOTOWY</name>
+		</location>
+		<location id="id1" x="-255" y="0">
+			<name x="-222" y="-51">PRZYPISYWANIE_SESJI</name>
+		</location>
+		<location id="id2" x="161" y="-127">
+			<name x="151" y="-161">NAWIAZYWANIE_POLACZENIA</name>
+		</location>
+		<location id="id3" x="153" y="-280">
+			<name x="143" y="-314">OCZEKIWANIE_ACK</name>
+		</location>
+		<init ref="id0"/>
+		<transition>
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="synchronisation" x="-194" y="-165">ack[obslugiwanyKlient]?</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="synchronisation" x="157" y="-220">synack[obslugiwanyKlient]!</label>
+		</transition>
+		<transition>
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<nail x="76" y="-76"/>
+		</transition>
+		<transition>
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="select" x="161" y="-93">i:int[0, MAKS_KLIENTOW-1]</label>
+			<label kind="synchronisation" x="161" y="-80">syn[i]?</label>
+			<label kind="assignment" x="161" y="-68">obslugiwanyKlient := i</label>
+		</transition>
+		<transition>
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="synchronisation" x="-194" y="-25">przypiszSesje[obslugiwanyKlient]!</label>
+		</transition>
+	</template>
+	<template>
+		<name>Klient</name>
+		<parameter>const int [0, MAKS_KLIENTOW-1] nr</parameter>
+		<declaration>clock czas;
+int t1;
+</declaration>
+		<location id="id4" x="0" y="0">
+			<name x="-10" y="-34">NIE_POLACZONY</name>
+		</location>
+		<location id="id5" x="-187" y="102">
+			<name x="-197" y="68">SESJA_PRZYPISANA</name>
+		</location>
+		<location id="id6" x="0" y="110">
+			<name x="-10" y="76">OCZEKIWANIE_NA_SESJE</name>
+		</location>
+		<location id="id7" x="238" y="102">
+			<name x="228" y="68">SERWER_ODPOWIEDZIAL</name>
+		</location>
+		<location id="id8" x="212" y="-17">
+			<name x="202" y="-51">WYSLANO_SYN</name>
+			<label kind="invariant" x="202" y="0">czas&lt;=MAKS_CZAS_CZEKANIA_NA_ODPOWIEDZ</label>
+		</location>
+		<init ref="id4"/>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="synchronisation" x="-169" y="34">rozlaczSesje[nr]?</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-76" y="-127">czas==MAKS_CZAS_CZEKANIA_NA_ODPOWIEDZ</label>
+			<nail x="145" y="-110"/>
+			<nail x="0" y="-102"/>
+		</transition>
+		<transition>
+			<source ref="id5"/>
+			<target ref="id4"/>
+			<label kind="guard" x="-314" y="0">czas&gt;=t1</label>
+			<label kind="synchronisation" x="-314" y="17">rozlaczSesje[nr]!</label>
+			<nail x="-195" y="-17"/>
+		</transition>
+		<transition>
+			<source ref="id4"/>
+			<target ref="id8"/>
+			<label kind="synchronisation" x="51" y="-42">syn[nr]!</label>
+			<label kind="assignment" x="51" y="-25">czas:=0</label>
+		</transition>
+		<transition>
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<label kind="synchronisation" x="225" y="25">synack[nr]?</label>
+		</transition>
+		<transition>
+			<source ref="id7"/>
+			<target ref="id6"/>
+			<label kind="synchronisation" x="18" y="89">ack[nr]!</label>
+		</transition>
+		<transition>
+			<source ref="id6"/>
+			<target ref="id5"/>
+			<label kind="select" x="-161" y="136">t:int[1,T2]</label>
+			<label kind="synchronisation" x="-169" y="89">przypiszSesje[nr]?</label>
+			<label kind="assignment" x="-169" y="106">czas := 0,
+t1 := t</label>
+		</transition>
+	</template>
+	<template>
+		<name>Sesja</name>
+		<parameter>const int [0, MAKS_KLIENTOW-1] nr</parameter>
+		<declaration>clock czas;
+</declaration>
+		<location id="id9" x="-110" y="-34">
+			<name x="-120" y="-68">WOLNA</name>
+		</location>
+		<location id="id10" x="76" y="-42">
+			<name x="66" y="-76">ZAJETA</name>
+			<label kind="invariant" x="66" y="-25">czas&lt;=T2</label>
+		</location>
+		<init ref="id9"/>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id10"/>
+			<label kind="synchronisation" x="-92" y="38">rozlaczSesje[nr]?</label>
+			<nail x="-110" y="51"/>
+			<nail x="85" y="59"/>
+		</transition>
+		<transition>
+			<source ref="id10"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-84" y="-195">czas&gt;=T2</label>
+			<label kind="synchronisation" x="-84" y="-178">rozlaczSesje[nr]!</label>
+			<nail x="76" y="-161"/>
+			<nail x="-102" y="-161"/>
+		</transition>
+		<transition>
+			<source ref="id9"/>
+			<target ref="id10"/>
+			<label kind="guard" x="-92" y="-72">T2&gt;=0</label>
+			<label kind="synchronisation" x="-92" y="-55">przypiszSesje[nr]?</label>
+			<label kind="assignment" x="-92" y="-38">czas := 0</label>
+		</transition>
+	</template>
+	<system>
+system Serwer, Klient, Sesja;    </system>
+	<queries>
+		<query>
+			<formula></formula>
+			<comment></comment>
+		</query>
+	</queries>
+</nta>
